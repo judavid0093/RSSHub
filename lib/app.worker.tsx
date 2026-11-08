@@ -38,6 +38,9 @@ const app = new Hono<{ Bindings: Bindings }>();
 
 // Set browser and KV bindings
 app.use(async (c, next) => {
+    if (c.req.path === '/__twitter-token-check') {
+        return c.text(c.env?.TWITTER_AUTH_TOKEN ? 'TWITTER_AUTH_TOKEN: PRESENT' : 'TWITTER_AUTH_TOKEN: MISSING');
+    }
     // Cloudflare bindings are supplied per request; expose the X token to RSSHub config.
     if (c.env?.TWITTER_AUTH_TOKEN) {
         setConfig({ TWITTER_AUTH_TOKEN: c.env.TWITTER_AUTH_TOKEN });
