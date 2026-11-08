@@ -3,6 +3,8 @@
 
 import type { DurableObjectNamespace, KVNamespace } from '@cloudflare/workers-types';
 import { Hono } from 'hono';
+
+import { setConfig } from '@/config';
 import { jsxRenderer } from 'hono/jsx-renderer';
 import { trimTrailingSlash } from 'hono/trailing-slash';
 
@@ -29,12 +31,17 @@ type Bindings = {
     BROWSER?: any; // Browser Rendering API binding
     BROWSER_SESSIONS?: DurableObjectNamespace;
     CACHE?: KVNamespace; // KV namespace for caching
+    TWITTER_AUTH_TOKEN?: string; // X session token for Twitter list routes
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
 
 // Set browser and KV bindings
 app.use(async (c, next) => {
+    // Cloudflare bindings are supplied per request; expose the X token to RSSHub config.
+    if (c.env?.TWITTER_AUTH_TOKEN) {
+        setConfig({ TWITTER_AUTH_TOKEN: c.env.TWITTER_AUTH_TOKEN });
+    }
     setBrowserBinding(c.env?.BROWSER);
     setBrowserSessionBinding(c.env?.BROWSER_SESSIONS);
     setPlaywrightServiceBinding(c.env?.PLAYWRIGHT_SERVICE, c.env?.PLAYWRIGHT_SERVICE_ORIGIN);
