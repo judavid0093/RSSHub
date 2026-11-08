@@ -5,6 +5,7 @@ import type { DurableObjectNamespace, KVNamespace } from '@cloudflare/workers-ty
 import { Hono } from 'hono';
 
 import { setConfig } from '@/config';
+import { config } from '@/config';
 import { jsxRenderer } from 'hono/jsx-renderer';
 import { trimTrailingSlash } from 'hono/trailing-slash';
 
@@ -39,7 +40,7 @@ const app = new Hono<{ Bindings: Bindings }>();
 // Set browser and KV bindings
 app.use(async (c, next) => {
     if (c.req.path === '/__twitter-token-check') {
-        return c.text(c.env?.TWITTER_AUTH_TOKEN ? 'TWITTER_AUTH_TOKEN: PRESENT' : 'TWITTER_AUTH_TOKEN: MISSING');
+        return c.text(config.twitter?.authToken?.length ? 'RSSHUB CONFIG: PRESENT' : 'RSSHUB CONFIG: MISSING');
     }
     // Cloudflare bindings are supplied per request; expose the X token to RSSHub config.
     if (c.env?.TWITTER_AUTH_TOKEN) {
