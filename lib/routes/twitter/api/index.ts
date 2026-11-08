@@ -31,7 +31,7 @@ const getApi = (): TwitterApi => {
     if (config.twitter.consumerKey && config.twitter.consumerSecret) {
         return devApi;
     }
-    throw new ConfigNotFoundError('No valid Twitter token found');
+    throw new ConfigNotFoundError(`No valid Twitter token found: thirdPartyApi=${Boolean(config.twitter.thirdPartyApi)}, authTokenLength=${config.twitter.authToken?.length ?? 0}`);
 };
 
 const dynamicApi: TwitterApi = {
