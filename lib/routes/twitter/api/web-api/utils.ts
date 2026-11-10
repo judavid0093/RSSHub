@@ -144,7 +144,10 @@ export const twitterGot = async (
     // previously in `onResponse` is now inlined below.
     const pathname = new URL(url).pathname;
     const clientTransactionId = /\/(?:UserTweetsAndReplies|SearchTimeline)$/.test(pathname) ? await getClientTransactionId('GET', pathname, options?.refreshTransactionId) : undefined;
-    const response = await undici.fetch(requestUrl, {
+    let response: Awaited<ReturnType<typeof undici.fetch>>;
+
+try {
+    response = await undici.fetch(requestUrl, {
         headers: {
             authority: 'x.com',
             accept: '*/*',
@@ -159,18 +162,25 @@ export const twitterGot = async (
             'x-twitter-client-language': 'en',
             'x-csrf-token': jsonCookie.ct0,
             ...(auth?.token
-                ? {
-                      'x-twitter-auth-type': 'OAuth2Session',
-                  }
-                : {
-                      'x-guest-token': jsonCookie.gt,
-                  }),
+                ? { 'x-twitter-auth-type': 'OAuth2Session' }
+                : { 'x-guest-token': jsonCookie.gt }),
             ...(clientTransactionId && {
                 'x-client-transaction-id': clientTransactionId,
             }),
         },
         dispatcher: dispatchers?.agent,
     });
+} catch (error) {
+    logger.error(
+        `twitter fetch diagnostic: ${JSON.stringify({
+            name: error instanceof Error ? error.name : undefined,
+            message: error instanceof Error ? error.message : String(error),
+            cause: error instanceof Error ? String(error.cause) : undefined,
+            stack: error instanceof Error ? error.stack : undefined,
+        })}`
+    );
+    throw error;
+}
 
     let responseData: any;
     try {
