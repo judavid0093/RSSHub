@@ -168,7 +168,7 @@ try {
                 'x-client-transaction-id': clientTransactionId,
             }),
         },
-        dispatcher: dispatchers?.agent,
+        //dispatcher: dispatchers?.agent,
     });
 } catch (error) {
     logger.error(
