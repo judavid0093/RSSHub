@@ -5,7 +5,7 @@
 name = "rsshub"
 main = "dist-worker/worker.mjs"
 compatibility_date = "2026-09-01"
-compatibility_flags = ["global_fetch_strictly_public", "nodejs_compat", "nodejs_compat_populate_process_env"]
+compatibility_flags = ["global_fetch_strictly_public", "nodejs_compat", "nodejs_compat_populate_process_env","no_throw_on_not_implemented_tls_options"]
 
 find_additional_modules = true
 base_dir = "dist-worker/modules"
