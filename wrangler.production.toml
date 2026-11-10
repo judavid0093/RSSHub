@@ -44,7 +44,6 @@ binding = "CACHE"
 
 [vars]
 # Only use the service binding for this endpoint origin.
-PLAYWRIGHT_SERVICE_ORIGIN = "https://cloudflare-patchright.rss3.workers.dev"
 # Environment variables can be set here or via wrangler secret
 # DEBUG_INFO = "false"
 
