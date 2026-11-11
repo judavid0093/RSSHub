@@ -15,7 +15,7 @@ rules = [{ type = "Data", globs = ["data_files/**"], fallthrough = true }]
 assets = { directory = "lib/assets" }
 
 [build]
-command = "pnpm run worker-build"
+command = "ulimit -n; pnpm run worker-build"
 
 # Workers Paid plan is recommended for better performance
 # Free plan has 10ms CPU time limit per request
