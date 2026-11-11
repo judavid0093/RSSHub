@@ -117,9 +117,10 @@ export function createDevRegistry({ routesDirectory, namespaces }: { routesDirec
         }
     };
 
-    const ensureAllLoaded = async (): Promise<void> => {
-        await Promise.all([...topDirectories].map((name) => ensureTopDirectory(name)));
-    };
-
+const ensureAllLoaded = async (): Promise<void> => {
+    for (const name of topDirectories) {
+        await ensureTopDirectory(name);
+    }
+};
     return { middleware, ensureAllLoaded };
 }
