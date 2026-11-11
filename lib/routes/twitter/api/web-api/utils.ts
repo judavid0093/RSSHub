@@ -147,7 +147,7 @@ export const twitterGot = async (
     let response: Awaited<ReturnType<typeof undici.fetch>>;
 
 try {
-    response = await undici.fetch(requestUrl, {
+    response = await fetch(requestUrl, {
         headers: {
             authority: 'x.com',
             accept: '*/*',
