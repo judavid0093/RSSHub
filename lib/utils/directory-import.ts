@@ -34,20 +34,17 @@ const readDirectory = (targetDirectoryPath: string, includeSubdirectories: boole
 export const directoryImport = async <T = unknown>({ targetDirectoryPath, importPattern = /.*/, includeSubdirectories = true }: DirectoryImportOptions) => {
     const modules: Record<string, T> = {};
     const filesPaths = readDirectory(targetDirectoryPath, includeSubdirectories);
-
     for (const filePath of filesPaths) {
-    const { ext: fileExtension } = path.parse(filePath);
-    const isValidModuleExtension = VALID_IMPORT_EXTENSIONS.has(fileExtension);
-    const isDeclarationFile = filePath.endsWith('.d.ts') || filePath.endsWith('.d.tsx');
-    const isValidFilePath = importPattern.test(filePath);
+        const { ext: fileExtension } = path.parse(filePath);
+        const isValidModuleExtension = VALID_IMPORT_EXTENSIONS.has(fileExtension);
+        const isDeclarationFile = filePath.endsWith('.d.ts') || filePath.endsWith('.d.tsx');
+        const isValidFilePath = importPattern.test(filePath);
 
-    if (!isValidModuleExtension || isDeclarationFile || !isValidFilePath) {
-        continue;
-    }
-
-    const relativeModulePath = filePath.slice(targetDirectoryPath.length);
-    modules[relativeModulePath] = await import(pathToFileURL(filePath).href);
-}
-
+        if (!isValidModuleExtension || isDeclarationFile || !isValidFilePath) {
+            continue;
+        }
+        const relativeModulePath = filePath.slice(targetDirectoryPath.length);
+            modules[relativeModulePath] = await import(pathToFileURL(filePath).href);
+        }
     return modules;
 };
